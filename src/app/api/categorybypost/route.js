@@ -9,8 +9,13 @@ export async function GET(req, res) {
     const categoriesInfo = await prisma.categories.findMany({
       where: {
         category: category,
-        include: {
-          posts: true,
+      },
+      include: {
+        posts: true,
+        posts: {
+          include: {
+            user: true,
+          },
         },
       },
     });
@@ -19,6 +24,7 @@ export async function GET(req, res) {
       data: categoriesInfo,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({
       msg: "failed",
       error,
