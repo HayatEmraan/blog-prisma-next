@@ -5,8 +5,9 @@ const prisma = new PrismaClient();
 export async function GET(req, res) {
   try {
     const posts = await prisma.posts.findMany({
-      where: {
-        createdAt: "desc",
+      include: {
+        user: true,
+        category: true,
       },
     });
     return NextResponse.json({
@@ -14,6 +15,7 @@ export async function GET(req, res) {
       data: posts,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({
       msg: "failed",
       error,
